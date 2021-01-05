@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "启动": {
+      "commandName": "Project",
+      "ErrorString": "Additional text encountered after finished reading JSON content: }. Path '', line 19, position 0."
+    }
+  }
+}
