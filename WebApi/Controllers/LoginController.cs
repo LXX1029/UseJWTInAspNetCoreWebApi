@@ -35,6 +35,7 @@ namespace WebApi.Controllers
         [Authorize]
         public ActionResult<IEnumerable<int>> GetList()
         {
+            var claims = HttpContext.User.Claims;
             return Ok(Enumerable.Range(1, 10).ToList());
         }
     }
