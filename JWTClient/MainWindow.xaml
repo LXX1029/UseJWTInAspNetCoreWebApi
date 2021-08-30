@@ -7,15 +7,16 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <StackPanel>
-            <WrapPanel Margin="10">
-                <Button Content="Login" Width="120" Height="40" Click="Button_Click"></Button>
-                <Button x:Name="btnGetList" Content="GetList" Width="120" Height="40" Click="btnGetList_Click" Margin="5,0"></Button>
-            </WrapPanel>
-            <ListBox x:Name="lb" Height="150">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <WrapPanel Margin="10">
+            <Button Content="Login" Width="120" Height="40" Click="Button_Click"></Button>
+            <Button x:Name="btnGetList" Content="GetList" Width="120" Height="40" Click="btnGetList_Click" Margin="5,0"></Button>
+        </WrapPanel>
+        <ListBox x:Name="lb" Height="250" Grid.Row="1" Margin="10">
 
-            </ListBox>
-        </StackPanel>
-
+        </ListBox>
     </Grid>
 </Window>

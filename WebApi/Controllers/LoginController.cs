@@ -27,11 +27,13 @@ namespace WebApi.Controllers
             }
             if (this._tokenService.Authenticate(user, password, out string token))
             {
+
                 return Ok(token);
             }
             return BadRequest();
         }
 
+        [HttpGet]
         [Authorize]
         public ActionResult<IEnumerable<int>> GetList()
         {

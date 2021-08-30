@@ -21,7 +21,7 @@ namespace WebApi
         private readonly IConfiguration _configuration;
         private const int KEY_SIZE = 32;
         private Microsoft.IdentityModel.Tokens.SymmetricSecurityKey _securityKey;
-        private const double VALID_FOR_MINUTES = 10.0;
+        private const double VALID_FOR_MINUTES = 0.5;
         public JWTTokenService(IConfiguration configuration)
         {
             this._configuration = configuration;
@@ -60,7 +60,8 @@ namespace WebApi
             if (user == "admin" && password == "admin")
             {
                 var credentials = new SigningCredentials(this._securityKey, SecurityAlgorithms.HmacSha256);
-                DateTime expiresOn = DateTime.Now.AddMinutes(VALID_FOR_MINUTES);
+                var expires = this._configuration.GetValue<double>("JwtExpire");
+                DateTime expiresOn = DateTime.Now.AddMinutes(expires);
                 var claims = new Claim[] {
                   new Claim(ClaimTypes.NameIdentifier,user),
                   new Claim(ClaimTypes.Expiration,expiresOn.ToLongDateString())
