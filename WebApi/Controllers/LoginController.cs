@@ -25,12 +25,13 @@ namespace WebApi.Controllers
             {
                 return BadRequest();
             }
-            if (this._tokenService.Authenticate(user, password, out string token))
+            // 验证user/password
+            if (user == "admin" && password == "admin")
             {
-
+                var token = this._tokenService.GenerateToken(user);
                 return Ok(token);
             }
-            return BadRequest();
+            return BadRequest("用户名或密码错误");
         }
 
         [HttpGet]

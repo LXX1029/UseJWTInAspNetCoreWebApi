@@ -13,19 +13,18 @@ namespace WebApi
 {
     public interface ITokenService
     {
-        bool Authenticate(string user, string password, out string token);
+        string GenerateToken(string userName);
     }
 
     public class JWTTokenService : ITokenService
     {
         private readonly IConfiguration _configuration;
         private const int KEY_SIZE = 32;
-        private Microsoft.IdentityModel.Tokens.SymmetricSecurityKey _securityKey;
-        private const double VALID_FOR_MINUTES = 0.5;
+        private SymmetricSecurityKey _securityKey;
         public JWTTokenService(IConfiguration configuration)
         {
             this._configuration = configuration;
-            this.InitializeCrypto();
+            this.InitializeSecurityKey();
         }
 
         /// <summary>
@@ -37,41 +36,41 @@ namespace WebApi
         /// <summary>
         ///  重新生成密钥
         /// </summary>
-        private void InitializeCrypto()
+        private void InitializeSecurityKey()
         {
             RNGCryptoServiceProvider cryptoProvider = new RNGCryptoServiceProvider();
             byte[] randomBytes = new byte[KEY_SIZE];
             cryptoProvider.GetBytes(randomBytes, 0, KEY_SIZE);
-            _securityKey = new Microsoft.IdentityModel.Tokens.SymmetricSecurityKey(randomBytes);
+            _securityKey = new SymmetricSecurityKey(randomBytes);
         }
 
         /// <summary>
-        /// 认证用户
+        /// 认证用户,生成Token
         /// </summary>
-        /// <param name="user">用户名</param>
-        /// <param name="password">密码</param>
-        /// <param name="token">token</param>
-        /// <returns>bool</returns>
-        public bool Authenticate(string user, string password, out string token)
+        /// <param name="userName">用户名</param>
+        /// <returns>string</returns>
+        public string GenerateToken(string userName)
         {
-            bool result = false;
-            token = null;
-            // 或者 查询数据库
-            if (user == "admin" && password == "admin")
+            JwtSecurityToken jwtToken;
+            try
             {
+                if (string.IsNullOrEmpty(userName) || string.IsNullOrWhiteSpace(userName))
+                    throw new ArgumentNullException("userName 为空");
                 var credentials = new SigningCredentials(this._securityKey, SecurityAlgorithms.HmacSha256);
                 var expires = this._configuration.GetValue<double>("JwtExpire");
                 DateTime expiresOn = DateTime.Now.AddMinutes(expires);
                 var claims = new Claim[] {
-                  new Claim(ClaimTypes.NameIdentifier,user),
+                  new Claim(ClaimTypes.NameIdentifier,userName),
                   new Claim(ClaimTypes.Expiration,expiresOn.ToLongDateString())
                 };
                 var issuer = Environment.MachineName;
-                var jwtToken = new JwtSecurityToken(issuer: issuer, audience: issuer, claims, null, expiresOn, credentials);
-                token = new JwtSecurityTokenHandler().WriteToken(jwtToken);
-                result = true;
+                jwtToken = new JwtSecurityToken(issuer: issuer, audience: issuer, claims, null, expiresOn, credentials);
             }
-            return result;
+            catch (Exception)
+            {
+                throw new Exception("生成 Token 值失败");
+            }
+            return new JwtSecurityTokenHandler().WriteToken(jwtToken);
         }
     }
 }

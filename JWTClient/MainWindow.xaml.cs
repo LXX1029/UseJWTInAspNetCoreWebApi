@@ -1,4 +1,5 @@
-﻿using Microsoft.IdentityModel.Tokens;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,7 @@ namespace JWTClient
         }
 
         private string _token = string.Empty;
-        private const string _scheme = "Bearer";
+        private const string _scheme = JwtBearerDefaults.AuthenticationScheme;// "Bearer";
 
         /// <summary>
         /// 模拟登陆
@@ -45,7 +46,7 @@ namespace JWTClient
             using var httpClient = new HttpClient();
             //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", tokenString);
             //var param = JsonConvert.SerializeObject(new { user = "admin", password = "admin" });
-            //var content = new StringContent(param, Encoding.UTF8, "application/json");
+            //var content = new StringContent(param, Encoding.UTF8, "application/json");  // 序列化类
             var param = new Dictionary<string, string>
             {
                 { "user", "admin" },

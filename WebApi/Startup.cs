@@ -42,8 +42,10 @@ namespace WebApi
                 opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
                 opt.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                
+   
             })
-                 .AddJwtBearer(opt =>
+                 .AddJwtBearer(opt =>   
                  {
                      opt.RequireHttpsMetadata = false;
                      opt.SaveToken = true;
@@ -58,7 +60,8 @@ namespace WebApi
                          IssuerSigningKey = tokenService.GetSecurityKey(),
                          ClockSkew = TimeSpan.Zero
                      };
-                 });
+                 })
+                 ;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
