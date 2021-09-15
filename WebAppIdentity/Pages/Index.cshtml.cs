@@ -35,6 +35,7 @@ namespace WebAppIdentity.Pages
 
         public async void OnGet()
         {
+            var user = HttpContext.User;
             RecipeList = (List<Recipe>)await this._recipeService.GetRecipes();
         }
 
