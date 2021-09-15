@@ -13,6 +13,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebAppIdentity.Data;
 using WebAppIdentity.Data.Services;
+using WebAppIdentity.Models;
 
 namespace WebAppIdentity
 {
@@ -40,7 +41,7 @@ namespace WebAppIdentity
                 });
             });
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddDefaultIdentity<IdentityUser>(options =>
+            services.AddDefaultIdentity<ApplicationUser>(options =>
             {
                 //options.SignIn.RequireConfirmedAccount = true;
                 options.Lockout.AllowedForNewUsers = true;// 启用用户锁定，防止用户密码被攻击
