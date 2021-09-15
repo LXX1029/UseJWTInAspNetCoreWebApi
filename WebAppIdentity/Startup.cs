@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebAppIdentity.Data;
+using WebAppIdentity.Data.Services;
 
 namespace WebAppIdentity
 {
@@ -35,13 +36,22 @@ namespace WebAppIdentity
                 var connectionString = this.Configuration.GetConnectionString(nameof(ApplicationDbContext));
                 options.UseSqlite(connectionString, builder =>
                 {
-                     
+
                 });
             });
             services.AddDatabaseDeveloperPageExceptionFilter();
-            services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddDefaultIdentity<IdentityUser>(options =>
+            {
+                //options.SignIn.RequireConfirmedAccount = true;
+                options.Lockout.AllowedForNewUsers = true;// 启用用户锁定，防止用户密码被攻击
+                options.Password.RequiredLength = 8;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireDigit = true;
+
+            }).AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddRazorPages();
+
+            services.AddScoped<RecipeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

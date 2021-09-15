@@ -5,6 +5,32 @@
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">RecipeList</h1>
+</div>
+<div>
+    <a asp-page="/Recipes/AddRecipe">Create New</a>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>IsVegetarian</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.RecipeList)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.IsVegetarian</td>
+                    <td>
+                        <a asp-page="/Recipes/EditRecipe" asp-route-recipeId="@item.RecipeId">Edit</a>
+                        <a asp-page-handler="Detial" asp-route-recipeId="@item.RecipeId">Detial</a>
+                        <a asp-page-handler="Delete" asp-route-recipeId="@item.RecipeId">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <ul>
+    </ul>
 </div>

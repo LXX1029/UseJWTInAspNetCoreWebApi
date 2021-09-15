@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using WebAppIdentity.Models;
 
 namespace WebAppIdentity.Data
 {
@@ -31,5 +32,6 @@ namespace WebAppIdentity.Data
             : base(options)
         {
         }
+        public DbSet<Recipe> Recipes { get; set; }
     }
 }

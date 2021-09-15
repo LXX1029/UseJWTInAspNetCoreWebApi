@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApi", "WebApi\WebApi.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JWTClient", "JWTClient\JWTClient.csproj", "{B802F351-C71F-4FA5-BB67-BC956ECEF1AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApiPolicy", "WebApiPolicy\WebApiPolicy.csproj", "{C33D9324-B382-4499-970E-C46E37F1F85D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApiPolicy", "WebApiPolicy\WebApiPolicy.csproj", "{C33D9324-B382-4499-970E-C46E37F1F85D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebAppIdentity", "WebAppIdentity\WebAppIdentity.csproj", "{898C2E93-7BCF-494D-A470-26DB39719699}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAppIdentity", "WebAppIdentity\WebAppIdentity.csproj", "{898C2E93-7BCF-494D-A470-26DB39719699}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

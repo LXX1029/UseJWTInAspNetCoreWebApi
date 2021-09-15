@@ -1,0 +1,23 @@
+﻿@page
+@model WebAppIdentity.Pages.Recipes.EditRecipeModel
+@{
+    ViewData["Title"] = "Edit";
+}
+<h1>Edit</h1>
+<div class="row">
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Recipe.RecipeId"/>
+        <div class="form-group">
+            <label asp-for="Recipe.Name" class="control-label"></label>
+            <input asp-for="Recipe.Name" class="form-control" />
+            <span asp-validation-for="Recipe.Name" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Edit" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+<div>
+    <a asp-page="/Index">Back to List</a>
+</div>
