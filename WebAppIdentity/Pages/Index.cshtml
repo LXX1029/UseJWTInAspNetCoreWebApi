@@ -23,7 +23,12 @@
                     <td>@item.Name</td>
                     <td>@item.IsVegetarian</td>
                     <td>
-                        <a asp-page="/Recipes/EditRecipe" asp-route-recipeId="@item.RecipeId">Edit</a>
+                        @*Name中包含2 显示“Edit”标签*@
+                        @if (User.Identity.Name.Contains("2"))
+                        {
+                            <a asp-page="/Recipes/EditRecipe" asp-route-recipeId="@item.RecipeId">Edit</a>
+                        }
+
                         <a asp-page-handler="Detial" asp-route-recipeId="@item.RecipeId">Detial</a>
                         <a asp-page-handler="Delete" asp-route-recipeId="@item.RecipeId">Delete</a>
                     </td>

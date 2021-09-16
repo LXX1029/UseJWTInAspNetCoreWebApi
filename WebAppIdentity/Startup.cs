@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
@@ -50,9 +52,24 @@ namespace WebAppIdentity
                 options.Password.RequireDigit = true;
 
             }).AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddAuthentication(options =>
-            {
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                  .AddCookie(options =>
+                  {
+                      //options.LoginPath = new PathString("/Identity/Account/Login");
+                      options.Cookie.Name = "YourAppCookieName";
+                      options.ExpireTimeSpan = TimeSpan.FromSeconds(10);
+                      options.SlidingExpiration = true;
+                      //options.AccessDeniedPath = new PathString("/Identity/Account/Denied");
+                  });
 
+            services.AddAuthorization(config =>
+            {
+                // NameHas2 策略，登录名中包含数字2
+                config.AddPolicy("NameHas2", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.RequireAssertion(m => m.User.Identity.Name.Contains("2"));
+                });
             });
 
 

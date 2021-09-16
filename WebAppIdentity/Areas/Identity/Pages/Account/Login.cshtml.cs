@@ -22,7 +22,7 @@ namespace WebAppIdentity.Areas.Identity.Pages.Account
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, 
+        public LoginModel(SignInManager<ApplicationUser> signInManager,
             ILogger<LoginModel> logger,
             UserManager<ApplicationUser> userManager)
         {
@@ -43,11 +43,15 @@ namespace WebAppIdentity.Areas.Identity.Pages.Account
 
         public class InputModel
         {
-            [Required]
-            [EmailAddress]
-            public string Email { get; set; }
+            [Display(Name ="姓名")]
+            [Required(ErrorMessage = "请输入姓名")]
+            public string Name { get; set; }
+            //[Required]
+            //[EmailAddress]
+            //public string Email { get; set; }
 
-            [Required]
+            [Display(Name = "密码")]
+            [Required(ErrorMessage = "请输入密码")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
@@ -77,16 +81,17 @@ namespace WebAppIdentity.Areas.Identity.Pages.Account
             returnUrl ??= Url.Content("~/");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-        
+
             if (ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(Input.Name, Input.Password, Input.RememberMe, lockoutOnFailure: false);
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return LocalRedirect(returnUrl);
+                    //return LocalRedirect(returnUrl);
+                    return RedirectToPage("../Index");
                 }
                 if (result.RequiresTwoFactor)
                 {
