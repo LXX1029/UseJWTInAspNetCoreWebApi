@@ -35,7 +35,7 @@ namespace WebAppIdentity.Pages
 
         public async void OnGet()
         {
-            var user = HttpContext.User;
+            var user = HttpContext.User.Identity;
             RecipeList = (List<Recipe>)await this._recipeService.GetRecipes();
         }
 
@@ -48,13 +48,13 @@ namespace WebAppIdentity.Pages
             return RedirectToPage("/Index");
         }
 
-        public async Task<IActionResult> OnGetEdit(int? recipeId)
+        public IActionResult OnGetEdit(int? recipeId)
         {
             if (recipeId == null) return NotFound();
 
             return RedirectToPage("/Recipes/EditRecipe", new { recipeId = recipeId });
 
-            
+
         }
     }
 }

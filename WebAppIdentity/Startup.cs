@@ -50,6 +50,12 @@ namespace WebAppIdentity
                 options.Password.RequireDigit = true;
 
             }).AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddAuthentication(options =>
+            {
+
+            });
+
+
             services.AddRazorPages();
 
             services.AddScoped<RecipeService>();
