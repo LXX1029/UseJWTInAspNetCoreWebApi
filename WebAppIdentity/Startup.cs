@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -52,15 +53,15 @@ namespace WebAppIdentity
                 options.Password.RequireDigit = true;
 
             }).AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                  .AddCookie(options =>
-                  {
-                      //options.LoginPath = new PathString("/Identity/Account/Login");
-                      options.Cookie.Name = "YourAppCookieName";
-                      options.ExpireTimeSpan = TimeSpan.FromSeconds(10);
-                      options.SlidingExpiration = true;
-                      //options.AccessDeniedPath = new PathString("/Identity/Account/Denied");
-                  });
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //      .AddCookie(options =>
+            //      {
+            //          //options.LoginPath = new PathString("/Identity/Account/Login");
+            //          options.Cookie.Name = "YourAppCookieName";
+            //          options.ExpireTimeSpan = TimeSpan.FromSeconds(10);
+            //          options.SlidingExpiration = true;
+            //          //options.AccessDeniedPath = new PathString("/Identity/Account/Denied");
+            //      });
 
             services.AddAuthorization(config =>
             {
@@ -68,10 +69,22 @@ namespace WebAppIdentity
                 config.AddPolicy("NameHas2", policy =>
                 {
                     policy.RequireAuthenticatedUser();
-                    policy.RequireAssertion(m => m.User.Identity.Name.Contains("2"));
+                    //policy.RequireAssertion(m => m.User.Identity.Name.Contains("2")); // Assertion 方式
+                    policy.AddRequirements(
+                         new NameRequirement("D")
+                        );
                 });
-            });
 
+                // IsRecipeOwner策略 表示Recipe是否由当前用户创建
+                config.AddPolicy("IsRecipeOwner", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.AddRequirements(new IsRecipeOwnerRequirement());
+                });
+
+            });
+            services.AddScoped<IAuthorizationHandler, NameRequerementHandler>();
+            services.AddScoped<IAuthorizationHandler, IsRecipeOwnerHandler>();
 
             services.AddRazorPages();
 

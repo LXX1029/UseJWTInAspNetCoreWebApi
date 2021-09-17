@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
@@ -11,16 +12,18 @@ using WebAppIdentity.Models;
 
 namespace WebAppIdentity.Pages
 {
-    [Authorize]
+    //[Authorize]
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;
         private readonly RecipeService _recipeService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public IndexModel(ILogger<IndexModel> logger, RecipeService recipeService)
+        public IndexModel(ILogger<IndexModel> logger, RecipeService recipeService, UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
             this._recipeService = recipeService;
+            this._userManager = userManager;
         }
 
         private List<Recipe> _recipeList;
@@ -30,13 +33,18 @@ namespace WebAppIdentity.Pages
             get { return _recipeList; }
             set { _recipeList = value; }
         }
+        public string CurrentUserId { get; set; }
 
 
 
         public async void OnGet()
         {
             var user = HttpContext.User.Identity;
+            this.CurrentUserId = this._userManager.GetUserId(HttpContext.User);
+
             RecipeList = (List<Recipe>)await this._recipeService.GetRecipes();
+
+
         }
 
         public async Task<IActionResult> OnGetDelete(int? recipeId)

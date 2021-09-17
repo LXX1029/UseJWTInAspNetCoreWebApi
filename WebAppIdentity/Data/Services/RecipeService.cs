@@ -17,7 +17,8 @@ namespace WebAppIdentity.Data.Services
         }
         public async Task<int> CreateRecipe(Recipe recipe)
         {
-            this._context.Recipes.Add(recipe);
+            var entry = this._context.Recipes.Add(recipe);
+            //entry.CurrentValues.SetValues();
             await this._context.SaveChangesAsync();
             return recipe.RecipeId;
         }

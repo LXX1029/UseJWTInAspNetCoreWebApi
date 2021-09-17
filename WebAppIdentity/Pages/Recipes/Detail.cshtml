@@ -1,0 +1,20 @@
+﻿@page
+@model WebAppIdentity.Pages.Recipes.DetailModel
+@{
+    ViewData["Title"] = "Edit";
+}
+<div>
+    <div class="form-group">
+        <label asp-for="Recipe.Name" class="control-label">@Model.Recipe.Name</label>
+        <label asp-for="Recipe.IsVegetarian" class="control-label">@Model.Recipe.IsVegetarian</label>
+        <label asp-for="Recipe.IsVegan" class="control-label">@Model.Recipe.IsVegan</label>
+    </div>
+</div>
+<div>
+    @if (Model.CanEditRecipe)
+    {
+        <a asp-page="EditRecipe" asp-route-recipeId="@Model.Recipe.RecipeId" class="btn btn-primary">编辑</a>
+    }
+
+    <a asp-page="/Index" class="btn btn-primary">返回列表</a>
+</div>

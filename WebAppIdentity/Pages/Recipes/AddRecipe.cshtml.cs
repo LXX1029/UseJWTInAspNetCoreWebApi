@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using WebAppIdentity.Data.Services;
@@ -11,11 +12,13 @@ namespace WebAppIdentity.Pages.Recipes
 {
     public class AddRecipeModel : PageModel
     {
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly RecipeService _recipeService;
 
-        public AddRecipeModel(RecipeService recipeService)
+        public AddRecipeModel(RecipeService recipeService, UserManager<ApplicationUser> userManager)
         {
             this._recipeService = recipeService;
+            this._userManager = userManager;
         }
         public void OnGet()
         {
@@ -29,6 +32,8 @@ namespace WebAppIdentity.Pages.Recipes
             {
                 return Page();
             }
+            var appUser = await this._userManager.GetUserAsync(this.User);
+            this.Recipe.CreatedById = appUser.Id;
             await this._recipeService.CreateRecipe(Recipe);
             return RedirectToPage("/Index");
         }

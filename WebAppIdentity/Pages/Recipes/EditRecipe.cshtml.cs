@@ -15,13 +15,17 @@ namespace WebAppIdentity.Pages.Recipes
     public class EditRecipeModel : PageModel
     {
         private readonly RecipeService _recipeService;
+        private readonly IAuthorizationService _authorizationService;
 
-        public EditRecipeModel(RecipeService recipeService)
+        public EditRecipeModel(RecipeService recipeService, IAuthorizationService authorizationService)
         {
             this._recipeService = recipeService;
+            this._authorizationService = authorizationService;
         }
-        [BindProperty]
+        [BindProperty(SupportsGet =true)]
         public Recipe Recipe { get; set; }
+
+
         public async Task<IActionResult> OnGet(int recipeId)
         {
             this.Recipe = await this._recipeService.GetRecipeById(recipeId);
@@ -29,31 +33,52 @@ namespace WebAppIdentity.Pages.Recipes
                 return NotFound();
             return Page();
 
+            //this.Recipe = await this._recipeService.GetRecipeById(recipeId);
+            //var authResult = await _authorizationService.AuthorizeAsync(User, Recipe, "IsRecipeOwner");
+            //this.CanEditRecipe = authResult.Succeeded;
+            ////if (!authResult.Succeeded)
+            ////{
+            ////    return new ForbidResult();
+            ////}
+            //return Page();
+
         }
 
-        public async Task<IActionResult> OnPostAsync()
+        public async Task<IActionResult> OnPostAsync(int recipedId)
         {
             if (!ModelState.IsValid)
             {
                 return Page();
             }
+
+            var recipeToUpdate = await this._recipeService.GetRecipeById(recipedId);
+            if (recipeToUpdate == null)
+                return NotFound();
             try
             {
-                await this._recipeService.EditRecipe(this.Recipe);
+            
+                //await this._recipeService.EditRecipe(this.Recipe);
+                var updateResult = await TryUpdateModelAsync<Recipe>(recipeToUpdate, "Recipe", r => r.Name);
+                if (updateResult)
+                {
+                    await this._recipeService.EditRecipe(recipeToUpdate);
+                    return RedirectToPage("/Index");
+                }
             }
             catch (DbUpdateConcurrencyException)
             {
                 if (!this._recipeService.RecipeExists(this.Recipe.RecipeId))
                 {
                     return NotFound();
-                }else
+                }
+                else
                 {
                     throw;
 
                 }
             }
 
-            return RedirectToPage("/Index");
+            return Page();
         }
     }
 }

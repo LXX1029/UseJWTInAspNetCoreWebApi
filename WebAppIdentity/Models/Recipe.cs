@@ -14,6 +14,9 @@ namespace WebAppIdentity.Models
         public string Name { get; set; }
         public bool IsVegetarian { get; set; }
         public bool IsVegan { get; set; }
+
+        public string CreatedById { get; set; }
+
         public ICollection<Ingredient> Ingredients { get; set; }
     }
     public class CreateRecipeDto
