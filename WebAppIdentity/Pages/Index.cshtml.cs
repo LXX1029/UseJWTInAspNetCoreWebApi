@@ -26,13 +26,16 @@ namespace WebAppIdentity.Pages
             this._userManager = userManager;
         }
 
-        private List<Recipe> _recipeList;
+        private ICollection<Recipe> _recipeList;
 
-        public List<Recipe> RecipeList
+        public ICollection<Recipe> RecipeList
         {
             get { return _recipeList; }
             set { _recipeList = value; }
         }
+        /// <summary>
+        /// 当前登录用户Id
+        /// </summary>
         public string CurrentUserId { get; set; }
 
 
@@ -43,8 +46,8 @@ namespace WebAppIdentity.Pages
             this.CurrentUserId = this._userManager.GetUserId(HttpContext.User);
 
             RecipeList = (List<Recipe>)await this._recipeService.GetRecipes();
-
-
+            this._logger.LogInformation($"Loaded {this.RecipeList.Count} recipes");
+            
         }
 
         public async Task<IActionResult> OnGetDelete(int? recipeId)

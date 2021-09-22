@@ -1,0 +1,23 @@
+[
+  {
+    "outputFileName": "wwwroot/css/site.min.css", // 生成css 文件名称
+    "inputFiles": [
+      "wwwroot/css/site.css",
+      "wwwroot/css/*.css",
+      "!wwwroot/css/site.min.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/site.min.js", // 生成js 文件名称
+    "inputFiles": [
+      "wwwroot/js/site.js",
+      "wwwroot/js/*.js",
+      "!wwwroot/js/site.min.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  }
+]
