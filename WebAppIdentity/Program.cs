@@ -3,8 +3,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Events;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,7 +16,16 @@ namespace WebAppIdentity
     {
         public static void Main(string[] args)
         {
-            Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
+            string logOutputTemplate = "{Timestamp:HH:mm:ss.fff zzz} || {Level} || {SourceContext:l} || {Message} || {Exception} ||end {NewLine}";
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+      .MinimumLevel.Override("Default", LogEventLevel.Information)
+      .MinimumLevel.Override("Microsoft", LogEventLevel.Error)
+      .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
+      .Enrich.FromLogContext()
+      .WriteTo.Console(theme: Serilog.Sinks.SystemConsole.Themes.AnsiConsoleTheme.Code)
+      .WriteTo.File($"{AppContext.BaseDirectory}Logs/Dotnet9.log", rollingInterval: RollingInterval.Day, outputTemplate: logOutputTemplate)
+      .CreateLogger();
             try
             {
                 CreateHostBuilder(args).Build().Run();
@@ -32,9 +43,30 @@ namespace WebAppIdentity
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                //.ConfigureLogging(builder =>builder.AddConsole())
-                //.ConfigureLogging(builder => builder.AddFile())
-                .UseSerilog()
+            //.ConfigureLogging(builder =>builder.AddConsole())
+            //.ConfigureLogging(builder => builder.AddFile())
+
+            //.ConfigureLogging((ctx, builder) =>
+            //{
+            //    builder.AddSeq();
+            //})
+
+            //    .ConfigureAppConfiguration(config =>
+            //    {
+            //        config.AddJsonFile("appsettings.json");
+            //    })
+            //.ConfigureLogging((ctx, builder) =>
+            //{
+            //    builder.AddConfiguration(ctx.Configuration.GetSection("Logging"));
+            //    builder.AddConsole();
+            //    builder.AddFile(option=> {
+            //        option.Periodicity = NetEscapades.Extensions.Logging.RollingFile.PeriodicityOptions.Daily;
+            //        option.LogDirectory = Directory.GetCurrentDirectory()+"//logs";
+            //    });
+            //})
+
+            .UseSerilog()
+
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseIIS();

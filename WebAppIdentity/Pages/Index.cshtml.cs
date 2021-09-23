@@ -47,7 +47,12 @@ namespace WebAppIdentity.Pages
 
             RecipeList = (List<Recipe>)await this._recipeService.GetRecipes();
             this._logger.LogInformation($"Loaded {this.RecipeList.Count} recipes");
-            
+            using (_logger.BeginScope("Scope value"))
+            {
+                this._logger.LogWarning(new Exception("自定义Warning异常"), $"Microsoft-Warning");
+            }
+            using (_logger.BeginScope(new Dictionary<string, object> { { "custom value", 12345 } }))
+                this._logger.LogError($"Microsoft-Error");
         }
 
         public async Task<IActionResult> OnGetDelete(int? recipeId)

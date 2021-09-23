@@ -1,3 +1,4 @@
+using LogDashboard;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -89,6 +90,7 @@ namespace WebAppIdentity
             services.AddRazorPages();
 
             services.AddScoped<RecipeService>();
+            services.AddLogDashboard();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -105,7 +107,7 @@ namespace WebAppIdentity
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseLogDashboard();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
