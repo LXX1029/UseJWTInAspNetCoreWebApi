@@ -26,9 +26,11 @@ namespace WebApiPolicy
         {
 
             services.AddControllers();
-            services.AddAuthentication(options =>
-            {
-
+            services.AddCors(options=> {
+                options.AddPolicy("OnlyGet", policy =>
+                {
+                    policy.WithMethods(new string[] { "Get"});
+                });
             });
         }
 
@@ -41,6 +43,7 @@ namespace WebApiPolicy
             }
 
             app.UseRouting();
+            app.UseCors();
 
             app.UseAuthorization();
 

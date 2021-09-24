@@ -16,16 +16,16 @@ namespace WebAppIdentity
     {
         public static void Main(string[] args)
         {
-            string logOutputTemplate = "{Timestamp:HH:mm:ss.fff zzz} || {Level} || {SourceContext:l} || {Message} || {Exception} ||end {NewLine}";
+            string logOutputTemplate = "{Timestamp:HH:mm:ss.fff zzz} || {Level} || {SourceContext:l} || {Message} || {Exception} || end {NewLine}";
             Log.Logger = new LoggerConfiguration()
+                //.Filter.ByExcluding(m=>m.Level == LogEventLevel.Information)
                 .MinimumLevel.Debug()
-      .MinimumLevel.Override("Default", LogEventLevel.Information)
-      .MinimumLevel.Override("Microsoft", LogEventLevel.Error)
-      .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
-      .Enrich.FromLogContext()
-      .WriteTo.Console(theme: Serilog.Sinks.SystemConsole.Themes.AnsiConsoleTheme.Code)
-      .WriteTo.File($"{AppContext.BaseDirectory}Logs/Dotnet9.log", rollingInterval: RollingInterval.Day, outputTemplate: logOutputTemplate)
-      .CreateLogger();
+                .MinimumLevel.Override("Default", LogEventLevel.Information)  // 默认App日志级别-Information
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Error)   // Microsoft 日志级别-Error
+                .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
+                .Enrich.FromLogContext()
+                .WriteTo.Console(theme: Serilog.Sinks.SystemConsole.Themes.AnsiConsoleTheme.Code)
+                .WriteTo.File($"{AppContext.BaseDirectory}Logs/Dotnet9.log", rollingInterval: RollingInterval.Minute, outputTemplate: logOutputTemplate).CreateLogger();
             try
             {
                 CreateHostBuilder(args).Build().Run();
@@ -46,6 +46,7 @@ namespace WebAppIdentity
             //.ConfigureLogging(builder =>builder.AddConsole())
             //.ConfigureLogging(builder => builder.AddFile())
 
+            // 使用Seq
             //.ConfigureLogging((ctx, builder) =>
             //{
             //    builder.AddSeq();
@@ -65,6 +66,7 @@ namespace WebAppIdentity
             //    });
             //})
 
+            // 使用Serilog
             .UseSerilog()
 
                 .ConfigureWebHostDefaults(webBuilder =>

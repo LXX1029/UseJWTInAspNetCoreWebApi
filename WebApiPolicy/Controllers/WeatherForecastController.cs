@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace WebApiPolicy.Controllers
 {
-    [Authorize]
+
     [ApiController]
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
@@ -24,7 +25,7 @@ namespace WebApiPolicy.Controllers
         {
             _logger = logger;
         }
-
+        [DisableCors]
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {

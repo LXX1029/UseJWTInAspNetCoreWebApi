@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using WebAppIdentity.Data.Services;
 using WebAppIdentity.Models;
@@ -53,6 +54,12 @@ namespace WebAppIdentity.Pages
             }
             using (_logger.BeginScope(new Dictionary<string, object> { { "custom value", 12345 } }))
                 this._logger.LogError($"Microsoft-Error");
+
+            using(var client = HttpClientFactory.Create())
+            {
+                var response =  await client.GetStringAsync("http://localhost:5002/WeatherForecast");
+                Console.WriteLine(response);
+            }
         }
 
         public async Task<IActionResult> OnGetDelete(int? recipeId)

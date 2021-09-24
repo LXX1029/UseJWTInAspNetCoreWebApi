@@ -33,6 +33,10 @@ namespace WebAppIdentity
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddHsts(options =>
+            {
+                //options.MaxAge = TimeSpan.FromHours(1);
+            });
             //services.AddDbContext<ApplicationDbContext>(options =>
             //    options.UseSqlServer(
             //        Configuration.GetConnectionString("DefaultConnection")));
@@ -91,6 +95,12 @@ namespace WebAppIdentity
 
             services.AddScoped<RecipeService>();
             services.AddLogDashboard();
+            //services.AddCors(options=> {
+            //    options.AddPolicy("AllowOtherApi", policy =>
+            //    {
+            //        policy.AllowAnyHeader();
+            //    });
+            //});
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -107,11 +117,14 @@ namespace WebAppIdentity
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+           app.UseHttpsRedirection();
             app.UseLogDashboard();
-            app.UseHttpsRedirection();
+          
             app.UseStaticFiles();
 
             app.UseRouting();
+
+            //app.UseCors();
 
             app.UseAuthentication();
             app.UseAuthorization();
