@@ -14,10 +14,10 @@ namespace WebAppIdentity.Pages.Recipes
     [Authorize(Policy = "NameHas2")]
     public class EditRecipeModel : PageModel
     {
-        private readonly RecipeService _recipeService;
+        private readonly IRecipeService _recipeService;
         private readonly IAuthorizationService _authorizationService;
 
-        public EditRecipeModel(RecipeService recipeService, IAuthorizationService authorizationService)
+        public EditRecipeModel(IRecipeService recipeService, IAuthorizationService authorizationService)
         {
             this._recipeService = recipeService;
             this._authorizationService = authorizationService;

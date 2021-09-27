@@ -1,3 +1,4 @@
+using Lamar.Microsoft.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
@@ -43,32 +44,32 @@ namespace WebAppIdentity
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-            //.ConfigureLogging(builder =>builder.AddConsole())
-            //.ConfigureLogging(builder => builder.AddFile())
+                //.ConfigureLogging(builder =>builder.AddConsole())
+                //.ConfigureLogging(builder => builder.AddFile())
 
-            // 使用Seq
-            //.ConfigureLogging((ctx, builder) =>
-            //{
-            //    builder.AddSeq();
-            //})
+                // 使用Seq
+                //.ConfigureLogging((ctx, builder) =>
+                //{
+                //    builder.AddSeq();
+                //})
 
-            //    .ConfigureAppConfiguration(config =>
-            //    {
-            //        config.AddJsonFile("appsettings.json");
-            //    })
-            //.ConfigureLogging((ctx, builder) =>
-            //{
-            //    builder.AddConfiguration(ctx.Configuration.GetSection("Logging"));
-            //    builder.AddConsole();
-            //    builder.AddFile(option=> {
-            //        option.Periodicity = NetEscapades.Extensions.Logging.RollingFile.PeriodicityOptions.Daily;
-            //        option.LogDirectory = Directory.GetCurrentDirectory()+"//logs";
-            //    });
-            //})
+                //    .ConfigureAppConfiguration(config =>
+                //    {
+                //        config.AddJsonFile("appsettings.json");
+                //    })
+                //.ConfigureLogging((ctx, builder) =>
+                //{
+                //    builder.AddConfiguration(ctx.Configuration.GetSection("Logging"));
+                //    builder.AddConsole();
+                //    builder.AddFile(option=> {
+                //        option.Periodicity = NetEscapades.Extensions.Logging.RollingFile.PeriodicityOptions.Daily;
+                //        option.LogDirectory = Directory.GetCurrentDirectory()+"//logs";
+                //    });
+                //})
 
-            // 使用Serilog
-            .UseSerilog()
-
+                // 使用Serilog
+                .UseSerilog()
+                //.UseLamar()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseIIS();

@@ -12,9 +12,9 @@ namespace WebAppIdentity.Pages.Recipes
 {
     public class DetailModel : PageModel
     {
-        private readonly RecipeService _recipeService;
+        private readonly IRecipeService _recipeService;
         private readonly IAuthorizationService _authorizationService;
-        public DetailModel(RecipeService recipeService, IAuthorizationService authorizationService)
+        public DetailModel(IRecipeService recipeService, IAuthorizationService authorizationService)
         {
             this._recipeService = recipeService;
             this._authorizationService = authorizationService;

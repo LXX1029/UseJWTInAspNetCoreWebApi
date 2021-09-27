@@ -7,7 +7,17 @@ using WebAppIdentity.Models;
 
 namespace WebAppIdentity.Data.Services
 {
-    public class RecipeService
+
+    public interface IRecipeService
+    {
+        Task<int> CreateRecipe(Recipe recipe);
+        Task<ICollection<Recipe>> GetRecipes();
+        Task DeleteRecipe(int recipeId);
+        Task<Recipe> GetRecipeById(int recipeId);
+        Task EditRecipe(Recipe recipe);
+        bool RecipeExists(int recipeId);
+    }
+    public class RecipeService : IRecipeService
     {
         private readonly ApplicationDbContext _context;
 

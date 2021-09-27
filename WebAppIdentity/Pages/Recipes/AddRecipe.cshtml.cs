@@ -13,9 +13,9 @@ namespace WebAppIdentity.Pages.Recipes
     public class AddRecipeModel : PageModel
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly RecipeService _recipeService;
+        private readonly IRecipeService _recipeService;
 
-        public AddRecipeModel(RecipeService recipeService, UserManager<ApplicationUser> userManager)
+        public AddRecipeModel(IRecipeService recipeService, UserManager<ApplicationUser> userManager)
         {
             this._recipeService = recipeService;
             this._userManager = userManager;
