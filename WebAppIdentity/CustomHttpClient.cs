@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Polly;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -31,4 +34,41 @@ namespace WebAppIdentity
 
         // TODO  可能增加的其它方法
     }
+
+    /// <summary>
+    /// 处理瞬时Http错误
+    /// </summary>
+    public static class TransientHttpErrorPolicyExtension
+    {
+        public static IHttpClientBuilder AddTransientHttpError(this IHttpClientBuilder httpClient)
+        {
+
+            return httpClient
+                .AddHttpMessageHandler<CustomMessageHandler>()
+                .AddTransientHttpErrorPolicy(policy =>
+            {
+                //return policy.WaitAndRetryAsync(3, i =>
+                //{
+                //    System.Diagnostics.Debug.WriteLine("11212");
+                //    return TimeSpan.FromSeconds(300);
+                //});
+                return policy.OrResult(response => !response.IsSuccessStatusCode)
+                .WaitAndRetryAsync(new[] {
+                   TimeSpan.FromSeconds(1), // 进行第一次重试之前延时1秒
+                   TimeSpan.FromSeconds(2), // 进行第二次重试之前延时2秒
+                   TimeSpan.FromSeconds(10),
+                });
+            });
+        }
+    }
+
+    public static class CustomPolicyHandlerExtension
+    {
+        public static IHttpClientBuilder AddCustomPolicyHandler(this IHttpClientBuilder httpClient)
+        {
+            var timeoutPolicy = Policy.TimeoutAsync<HttpResponseMessage>(5, timeoutStrategy: Polly.Timeout.TimeoutStrategy.Pessimistic);
+            return httpClient.AddPolicyHandler(timeoutPolicy);
+        }
+    }
+
 }

@@ -22,7 +22,7 @@ namespace WebAppIdentity
                 //.Filter.ByExcluding(m=>m.Level == LogEventLevel.Information)
                 .MinimumLevel.Debug()
                 .MinimumLevel.Override("Default", LogEventLevel.Information)  // 默认App日志级别-Information
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Error)   // Microsoft 日志级别-Error
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)   // Microsoft 日志级别-Error
                 .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
                 .Enrich.FromLogContext()
                 .WriteTo.Console(theme: Serilog.Sinks.SystemConsole.Themes.AnsiConsoleTheme.Code)
@@ -72,8 +72,9 @@ namespace WebAppIdentity
                 //.UseLamar()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseIIS();
+                    //webBuilder.UseIIS();
                     webBuilder.UseStartup<Startup>();
+                    webBuilder.UseUrls(new string[] { "http://*:5555", "http://*:8085" });
                 });
     }
 }

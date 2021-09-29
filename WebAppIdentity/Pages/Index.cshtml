@@ -8,7 +8,9 @@
     <h1 class="display-4">RecipeList</h1>
 </div>
 <div>
+    @if(!string.IsNullOrEmpty(Model.CurrentUserId)){
     <a asp-page="/Recipes/AddRecipe">Create New</a>
+    }
     <table class="table table-bordered">
         <thead>
             <tr>
@@ -19,30 +21,30 @@
         <tbody>
             @foreach (var item in Model.RecipeList)
             {
-                <tr>
-                    <td>@item.Name</td>
-                    <td>@item.IsVegetarian</td>
-                    <td>
-                        @*Name中包含2 显示“Edit”标签*@
-                        @*@if (User.Identity.Name.Contains("2"))
-                            {
-                                <a asp-page="/Recipes/EditRecipe" asp-route-recipeId="@item.RecipeId">Edit</a>
-                            }*@
-                        @*@if (User.Identity.IsAuthenticated)
-                            {
-                                <a asp-page="/Recipes/EditRecipe" asp-route-recipeId="@item.RecipeId">Edit</a>
-                                <a asp-page="/Recipes/Detail" asp-route-recipeId="@item.RecipeId">Detial</a>
-                                <a asp-page-handler="Delete" asp-route-recipeId="@item.RecipeId">Delete</a>
-                            }*@
-                        @if (item.CreatedById == Model.CurrentUserId)
+            <tr>
+                <td>@item.Name</td>
+                <td>@item.IsVegetarian</td>
+                <td>
+                    @*Name中包含2 显示“Edit”标签*@
+                    @*@if (User.Identity.Name.Contains("2"))
                         {
                             <a asp-page="/Recipes/EditRecipe" asp-route-recipeId="@item.RecipeId">Edit</a>
+                        }*@
+                    @*@if (User.Identity.IsAuthenticated)
+                        {
+                            <a asp-page="/Recipes/EditRecipe" asp-route-recipeId="@item.RecipeId">Edit</a>
+                            <a asp-page="/Recipes/Detail" asp-route-recipeId="@item.RecipeId">Detial</a>
                             <a asp-page-handler="Delete" asp-route-recipeId="@item.RecipeId">Delete</a>
+                        }*@
+                    @if (item.CreatedById == Model.CurrentUserId)
+                        {
+                    <a asp-page="/Recipes/EditRecipe" asp-route-recipeId="@item.RecipeId">Edit</a>
+                    <a asp-page-handler="Delete" asp-route-recipeId="@item.RecipeId">Delete</a>
                         }
-                        <a asp-page="/Recipes/Detail" asp-route-recipeId="@item.RecipeId">Detial</a>
-                    </td>
-                </tr>
-            }
+                    <a asp-page="/Recipes/Detail" asp-route-recipeId="@item.RecipeId">Detial</a>
+                </td>
+            </tr>
+    }
         </tbody>
     </table>
     <ul>

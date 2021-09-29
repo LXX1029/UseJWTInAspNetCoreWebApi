@@ -36,6 +36,7 @@ namespace WebAppIdentity.Middleware
         public async Task Invoke(HttpContext context, CustomHttpClient customHttpClient)
         {
             var weatherJson = await customHttpClient.GetLocationWeatherInfo();
+            context.Response.ContentType = "application/json;utf-8";
             await context.Response.WriteAsync(weatherJson);   // 输出天气json
             //await this._next(context);
         }

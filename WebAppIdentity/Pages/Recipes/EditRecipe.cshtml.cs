@@ -33,6 +33,8 @@ namespace WebAppIdentity.Pages.Recipes
                 return NotFound();
             return Page();
 
+
+
             //this.Recipe = await this._recipeService.GetRecipeById(recipeId);
             //var authResult = await _authorizationService.AuthorizeAsync(User, Recipe, "IsRecipeOwner");
             //this.CanEditRecipe = authResult.Succeeded;

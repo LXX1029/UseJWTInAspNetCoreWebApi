@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using Polly;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,17 +42,29 @@ namespace WebAppIdentity
         public void ConfigureServices(IServiceCollection services)
         {
             // 使用类型化httpClient 添加httpClient服务
+            services.AddTransient<CustomMessageHandler>();
             services.AddHttpClient<CustomHttpClient>(client =>
             {
                 client.BaseAddress = new Uri("https://restapi.amap.com");
-            });
-            services.AddHsts(options =>
+            })
+                //.AddTransientHttpError();
+                .AddCustomPolicyHandler();
+            services.AddCors(options =>
             {
-                //options.MaxAge = TimeSpan.FromHours(1);
+                options.AddPolicy("CorsPolicy", builder =>
+                {
+                    builder.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
+                });
             });
+            //services.AddHsts(options =>
+            //{
+            //    options.MaxAge = TimeSpan.FromHours(1);
+            //});
             //services.AddDbContext<ApplicationDbContext>(options =>
             //    options.UseSqlServer(
             //        Configuration.GetConnectionString("DefaultConnection")));
+
+
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 var connectionString = this.Configuration.GetConnectionString(nameof(ApplicationDbContext));
@@ -86,8 +99,14 @@ namespace WebAppIdentity
                     policy.AddRequirements(new IsRecipeOwnerRequirement());
                 });
             });
-            services.AddRazorPages();
+            services.AddRazorPages()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
+                });
             services.AddLogDashboard();
+            // 注入 NameRequerement 处理类
+            services.AddScoped<IAuthorizationHandler, NameRequerementHandler>();
             services.AddScoped<IRecipeService, RecipeService>();
             services.Configure<WeatherOptions>(this.Configuration.GetSection(nameof(WeatherOptions)));
             services.AddSingleton<IConfigureOptions<WeatherOptions>, ConfigureWeatherOptions>();
@@ -168,9 +187,9 @@ namespace WebAppIdentity
             {
                 app.UseExceptionHandler("/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
+                //app.UseHsts();
             }
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseLogDashboard();
 
 
@@ -196,7 +215,7 @@ namespace WebAppIdentity
             app.UseStaticFiles();
             app.UseRouting();
 
-            //app.UseCors();
+            app.UseCors("CorsPolicy");
 
             app.UseAuthentication();
             app.UseAuthorization();

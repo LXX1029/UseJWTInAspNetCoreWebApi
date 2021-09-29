@@ -22,7 +22,7 @@ namespace WebAppIdentity.Models
         public string NameKey { get; set; }
     }
     /// <summary>
-    /// 授权处理
+    /// Name条件 授权处理
     /// </summary>
     public class NameRequerementHandler : AuthorizationHandler<NameRequirement>
     {
