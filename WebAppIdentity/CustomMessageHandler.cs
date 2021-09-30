@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace WebAppIdentity
 {
     /// <summary>
-    /// 自定义HttpClientMessageHandler 类，额外处理请求信息
+    /// 自定义HttpClientMessageHandler 类，在Handlers通道中可以增加额外处理
     /// </summary>
     public class CustomMessageHandler : DelegatingHandler
     {

@@ -49,6 +49,10 @@ namespace WebAppIdentity
             })
                 //.AddTransientHttpError();
                 .AddCustomPolicyHandler();
+            services.AddHostedService<CustomWeatherHostedService>();
+
+
+
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", builder =>

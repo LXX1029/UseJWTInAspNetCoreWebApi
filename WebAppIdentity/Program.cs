@@ -74,7 +74,7 @@ namespace WebAppIdentity
                 {
                     //webBuilder.UseIIS();
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls(new string[] { "http://*:5555", "http://*:8085" });
+                   // webBuilder.UseUrls(new string[] { "http://*:5555", "http://*:8085" });
                 });
     }
 }
