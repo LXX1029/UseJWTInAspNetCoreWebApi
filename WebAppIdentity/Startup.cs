@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Polly;
+using Quartz;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,6 +27,7 @@ using WebAppIdentity.Data;
 using WebAppIdentity.Data.Services;
 using WebAppIdentity.Middleware;
 using WebAppIdentity.Models;
+using WebAppIdentity.Quartz;
 
 namespace WebAppIdentity
 {
@@ -43,13 +45,13 @@ namespace WebAppIdentity
         {
             // 使用类型化httpClient 添加httpClient服务
             services.AddTransient<CustomMessageHandler>();
-            services.AddHttpClient<CustomHttpClient>(client =>
+            services.AddHttpClient<GetWeatherHttpClient>(client =>
             {
                 client.BaseAddress = new Uri("https://restapi.amap.com");
             })
                 //.AddTransientHttpError();
                 .AddCustomPolicyHandler();
-            services.AddHostedService<CustomWeatherHostedService>();
+
 
 
 
@@ -103,17 +105,32 @@ namespace WebAppIdentity
                     policy.AddRequirements(new IsRecipeOwnerRequirement());
                 });
             });
-            services.AddRazorPages()
-                .AddJsonOptions(options =>
-                {
-                    options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.All);
-                });
+            services.AddRazorPages();
             services.AddLogDashboard();
             // 注入 NameRequerement 处理类
             services.AddScoped<IAuthorizationHandler, NameRequerementHandler>();
             services.AddScoped<IRecipeService, RecipeService>();
             services.Configure<WeatherOptions>(this.Configuration.GetSection(nameof(WeatherOptions)));
             services.AddSingleton<IConfigureOptions<WeatherOptions>, ConfigureWeatherOptions>();
+
+
+            //services.AddHostedService<CustomWeatherHostedService>();
+
+            #region 添加定时服务
+            services.AddQuartz(q =>
+     {
+         q.UseMicrosoftDependencyInjectionJobFactory();
+         var jobKey = new JobKey("GetWeatherJob");
+         q.AddJob<GetWeatherHttpClientJob>(opts => opts.WithIdentity(jobKey));
+         q.AddTrigger(opts => opts.ForJob(jobKey)
+             .WithIdentity(jobKey.Name + "-Trigger")
+             .StartNow()
+             .WithSimpleSchedule(x => x.WithIntervalInSeconds(5).RepeatForever())
+
+         );
+     });
+            services.AddQuartzHostedService(m => m.WaitForJobsToComplete = true);
+            #endregion
         }
         /*
         public void ConfigureContainer(ServiceRegistry services)

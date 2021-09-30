@@ -12,11 +12,11 @@ namespace WebAppIdentity
     /// <summary>
     ///  自定义HttpClient类
     /// </summary>
-    public class CustomHttpClient
+    public class GetWeatherHttpClient
     {
         private readonly HttpClient _client;
 
-        public CustomHttpClient(HttpClient client)
+        public GetWeatherHttpClient(HttpClient client)
         {
             this._client = client;
 

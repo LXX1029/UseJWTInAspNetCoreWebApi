@@ -19,11 +19,11 @@ namespace WebAppIdentity
         {
             string logOutputTemplate = "{Timestamp:HH:mm:ss.fff zzz} || {Level} || {SourceContext:l} || {Message} || {Exception} || end {NewLine}";
             Log.Logger = new LoggerConfiguration()
-                //.Filter.ByExcluding(m=>m.Level == LogEventLevel.Information)
+                .Filter.ByExcluding(m=>m.Level == LogEventLevel.Debug)
                 .MinimumLevel.Debug()
                 .MinimumLevel.Override("Default", LogEventLevel.Information)  // 默认App日志级别-Information
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Information)   // Microsoft 日志级别-Error
-                .MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
+               // .MinimumLevel.Override("Microsoft", LogEventLevel.Information)   // Microsoft 日志级别-Error
+                //.MinimumLevel.Override("Microsoft.Hosting.Lifetime", LogEventLevel.Information)
                 .Enrich.FromLogContext()
                 .WriteTo.Console(theme: Serilog.Sinks.SystemConsole.Themes.AnsiConsoleTheme.Code)
                 .WriteTo.File($"{AppContext.BaseDirectory}Logs/Dotnet9.log", rollingInterval: RollingInterval.Minute, outputTemplate: logOutputTemplate).CreateLogger();
@@ -74,7 +74,7 @@ namespace WebAppIdentity
                 {
                     //webBuilder.UseIIS();
                     webBuilder.UseStartup<Startup>();
-                   // webBuilder.UseUrls(new string[] { "http://*:5555", "http://*:8085" });
+                    // webBuilder.UseUrls(new string[] { "http://*:5555", "http://*:8085" });
                 });
     }
 }

@@ -8,12 +8,12 @@ namespace WebAppIdentity.CustomConfigure
 {
     public class ConfigureWeatherOptions : IConfigureOptions<WeatherOptions>
     {
-        private readonly CustomHttpClient _customHttpClient;
+        private readonly GetWeatherHttpClient _customHttpClient;
 
         /// <summary>
         /// 可注入其它服务，以获取外部配置
         /// </summary>
-        public ConfigureWeatherOptions(CustomHttpClient customHttpClient)
+        public ConfigureWeatherOptions(GetWeatherHttpClient customHttpClient)
         {
             this._customHttpClient = customHttpClient;
         }

@@ -33,7 +33,7 @@ namespace WebAppIdentity.Middleware
         {
             this._next = next;
         }
-        public async Task Invoke(HttpContext context, CustomHttpClient customHttpClient)
+        public async Task Invoke(HttpContext context, GetWeatherHttpClient customHttpClient)
         {
             var weatherJson = await customHttpClient.GetLocationWeatherInfo();
             context.Response.ContentType = "application/json;utf-8";
