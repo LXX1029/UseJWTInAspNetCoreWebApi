@@ -43,7 +43,7 @@ namespace WebAppIdentity
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // 使用类型化httpClient 添加httpClient服务
+            #region 使用类型化httpClient 添加httpClient服务
             services.AddTransient<CustomMessageHandler>();
             services.AddHttpClient<GetWeatherHttpClient>(client =>
             {
@@ -51,10 +51,9 @@ namespace WebAppIdentity
             })
                 //.AddTransientHttpError();
                 .AddCustomPolicyHandler();
+            #endregion
 
-
-
-
+            #region 跨域请求
             services.AddCors(options =>
             {
                 options.AddPolicy("CorsPolicy", builder =>
@@ -62,6 +61,7 @@ namespace WebAppIdentity
                     builder.AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin();
                 });
             });
+            #endregion
             //services.AddHsts(options =>
             //{
             //    options.MaxAge = TimeSpan.FromHours(1);
@@ -70,13 +70,16 @@ namespace WebAppIdentity
             //    options.UseSqlServer(
             //        Configuration.GetConnectionString("DefaultConnection")));
 
-
+            #region 添加DbContext
             services.AddDbContext<ApplicationDbContext>(options =>
             {
                 var connectionString = this.Configuration.GetConnectionString(nameof(ApplicationDbContext));
                 options.UseSqlite(connectionString, builder => { });
             });
             services.AddDatabaseDeveloperPageExceptionFilter();
+            #endregion
+
+            #region 默认标识
             services.AddDefaultIdentity<ApplicationUser>(options =>
             {
                 //options.SignIn.RequireConfirmedAccount = true;
@@ -86,16 +89,17 @@ namespace WebAppIdentity
                 options.Password.RequireDigit = true;
 
             }).AddEntityFrameworkStores<ApplicationDbContext>();
+            #endregion
+
+            #region 添加授权策略
             services.AddAuthorization(config =>
             {
-                // NameHas2 策略，登录名中包含数字2
-                config.AddPolicy("NameHas2", policy =>
+                // NameHas2 策略，登录名中包含字母D
+                config.AddPolicy("NameHasD", policy =>
                 {
                     policy.RequireAuthenticatedUser();
                     //policy.RequireAssertion(m => m.User.Identity.Name.Contains("2")); // Assertion 方式
-                    policy.AddRequirements(
-                         new NameRequirement("D")
-                        );
+                    policy.AddRequirements(new NameRequirement("D"));
                 });
 
                 // IsRecipeOwner策略 表示Recipe是否由当前用户创建
@@ -105,6 +109,7 @@ namespace WebAppIdentity
                     policy.AddRequirements(new IsRecipeOwnerRequirement());
                 });
             });
+            #endregion
             services.AddRazorPages();
             services.AddLogDashboard();
             // 注入 NameRequerement 处理类
@@ -113,22 +118,36 @@ namespace WebAppIdentity
             services.Configure<WeatherOptions>(this.Configuration.GetSection(nameof(WeatherOptions)));
             services.AddSingleton<IConfigureOptions<WeatherOptions>, ConfigureWeatherOptions>();
 
-
+            #region 添加Background Task
             //services.AddHostedService<CustomWeatherHostedService>();
+            #endregion
 
             #region 添加定时服务
-            services.AddQuartz(q =>
-     {
-         q.UseMicrosoftDependencyInjectionJobFactory();
-         var jobKey = new JobKey("GetWeatherJob");
-         q.AddJob<GetWeatherHttpClientJob>(opts => opts.WithIdentity(jobKey));
-         q.AddTrigger(opts => opts.ForJob(jobKey)
-             .WithIdentity(jobKey.Name + "-Trigger")
-             .StartNow()
-             .WithSimpleSchedule(x => x.WithIntervalInSeconds(5).RepeatForever())
+            var connectionString = this.Configuration.GetConnectionString(nameof(ApplicationDbContext));
 
-         );
-     });
+
+            services.AddQuartz(q =>
+                {
+                    q.SchedulerId = "auto";
+                    q.UseMicrosoftDependencyInjectionJobFactory();
+
+                    //q.UsePersistentStore(s =>
+                    //{
+                    //    s.UseSQLite(connectionString);
+                    //    s.UseClustering();
+                    //    s.UseProperties = true;
+                      
+                    //});
+                   
+
+                    var jobKey = new JobKey("GetWeatherJob");
+                    q.AddJob<GetWeatherHttpClientJob>(opts => opts.WithIdentity(jobKey));
+                    q.AddTrigger(opts => opts.ForJob(jobKey)
+                    .WithIdentity(jobKey.Name + "-Trigger")
+                    .StartNow()
+                    .WithSimpleSchedule(x => x.WithIntervalInSeconds(5).RepeatForever()));  // 5秒钟调度一次
+                    //.WithSchedule(CronScheduleBuilder.WeeklyOnDayAndHourAndMinute(DayOfWeek.Thursday, 18, 30)));    // 每周四18:30 调度一次
+                });
             services.AddQuartzHostedService(m => m.WaitForJobsToComplete = true);
             #endregion
         }

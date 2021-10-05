@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,8 +29,11 @@ namespace WebAppIdentity.Middleware
 
     public class PingPongMiddleware
     {
+        private readonly RequestDelegate _next;
+
         public PingPongMiddleware(RequestDelegate next)
         {
+            this._next = next;
 
         }
 
@@ -39,7 +43,9 @@ namespace WebAppIdentity.Middleware
             {
                 context.Response.ContentType = "text/plain";
                 await context.Response.WriteAsync($"{DateTime.Now.ToLongDateString()} ping pong");
+                return;
             }
+            await this._next(context);
         }
     }
 }

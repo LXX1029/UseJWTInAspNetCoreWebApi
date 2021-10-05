@@ -11,7 +11,7 @@ using WebAppIdentity.Models;
 
 namespace WebAppIdentity.Pages.Recipes
 {
-    [Authorize(Policy = "NameHas2")]
+    [Authorize(Policy = "NameHasD")]
     public class EditRecipeModel : PageModel
     {
         private readonly IRecipeService _recipeService;
@@ -22,7 +22,7 @@ namespace WebAppIdentity.Pages.Recipes
             this._recipeService = recipeService;
             this._authorizationService = authorizationService;
         }
-        [BindProperty(SupportsGet =true)]
+        [BindProperty(SupportsGet = true)]
         public Recipe Recipe { get; set; }
 
 
@@ -58,7 +58,7 @@ namespace WebAppIdentity.Pages.Recipes
                 return NotFound();
             try
             {
-            
+
                 //await this._recipeService.EditRecipe(this.Recipe);
                 var updateResult = await TryUpdateModelAsync<Recipe>(recipeToUpdate, "Recipe", r => r.Name);
                 if (updateResult)

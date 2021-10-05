@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApiPolicy", "WebApiPolic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAppIdentity", "WebAppIdentity\WebAppIdentity.csproj", "{898C2E93-7BCF-494D-A470-26DB39719699}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WorkerServiceTest", "WorkerServiceTest\WorkerServiceTest.csproj", "{D17E8B02-E740-4D3F-9B30-D5AB245D5F1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkerServiceTest", "WorkerServiceTest\WorkerServiceTest.csproj", "{D17E8B02-E740-4D3F-9B30-D5AB245D5F1D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebIdentityTest", "WebIdentityTest\WebIdentityTest.csproj", "{407892D6-77DE-4744-963A-A32474B882C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{D17E8B02-E740-4D3F-9B30-D5AB245D5F1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D17E8B02-E740-4D3F-9B30-D5AB245D5F1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D17E8B02-E740-4D3F-9B30-D5AB245D5F1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{407892D6-77DE-4744-963A-A32474B882C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{407892D6-77DE-4744-963A-A32474B882C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{407892D6-77DE-4744-963A-A32474B882C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{407892D6-77DE-4744-963A-A32474B882C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

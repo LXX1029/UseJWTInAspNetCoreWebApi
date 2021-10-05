@@ -32,7 +32,7 @@ namespace WebAppIdentity
                     // 可将当前weather 存储到缓存中，可在全局范围内使用
                     System.Diagnostics.Debug.WriteLine(weather);
                 }
-
+                // 10s 中运行一次
                 await Task.Delay(TimeSpan.FromSeconds(10), stoppingToken);
             }
         }
