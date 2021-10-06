@@ -43,7 +43,8 @@ namespace WebIdentityTest
 
             //Assert.True(wasExecuted);
             Assert.Contains("pong", response);
-
         }
+
+   
     }
 }
