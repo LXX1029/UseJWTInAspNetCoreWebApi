@@ -111,6 +111,9 @@ namespace WebAppIdentity
             });
             #endregion
             services.AddRazorPages();
+
+            services.AddControllers();
+
             services.AddLogDashboard();
             // 注入 NameRequerement 处理类
             services.AddScoped<IAuthorizationHandler, NameRequerementHandler>();
@@ -136,9 +139,9 @@ namespace WebAppIdentity
                     //    s.UseSQLite(connectionString);
                     //    s.UseClustering();
                     //    s.UseProperties = true;
-                      
+
                     //});
-                   
+
 
                     var jobKey = new JobKey("GetWeatherJob");
                     q.AddJob<GetWeatherHttpClientJob>(opts => opts.WithIdentity(jobKey));
@@ -286,9 +289,8 @@ namespace WebAppIdentity
                 }).WithDisplayName("ping end point");
                 endpoints.MapWeather("/weather");
 
-
-
                 endpoints.MapRazorPages();
+                endpoints.MapControllers();
             });
             // 终结路由，返回响应
             app.Run(async (context) =>
