@@ -11,7 +11,7 @@ namespace WebAppIdentity.Quartz
     /// <summary>
     /// 定义获取天气信息任务
     /// 当任务被执行时，都会创建新的Job引用
-    ///  DisallowConcurrentExecution  不进行并发执行
+    ///  DisallowConcurrentExecution  表示不进行并发执行
     /// </summary>
     [DisallowConcurrentExecution]
     public class GetWeatherHttpClientJob : IJob

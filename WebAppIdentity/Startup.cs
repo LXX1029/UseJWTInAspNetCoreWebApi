@@ -102,7 +102,7 @@ namespace WebAppIdentity
                     policy.AddRequirements(new NameRequirement("D"));
                 });
 
-                // IsRecipeOwner策略 表示Recipe是否由当前用户创建
+                // IsRecipeOwner策略 表示Recipe是否由当前用户创建，是则显示修改/删除，否则不显示；
                 config.AddPolicy("IsRecipeOwner", policy =>
                 {
                     policy.RequireAuthenticatedUser();
@@ -110,9 +110,14 @@ namespace WebAppIdentity
                 });
             });
             #endregion
+
+            // 添加RazorPage服务
             services.AddRazorPages();
 
-            services.AddControllers();
+            // 不使用EnableEndpointRouting
+            services.AddControllersWithViews(options => options.EnableEndpointRouting = false);
+            //services.AddControllers();
+
 
             services.AddLogDashboard();
             // 注入 NameRequerement 处理类
@@ -127,8 +132,6 @@ namespace WebAppIdentity
 
             #region 添加定时服务
             var connectionString = this.Configuration.GetConnectionString(nameof(ApplicationDbContext));
-
-
             services.AddQuartz(q =>
                 {
                     q.SchedulerId = "auto";
@@ -151,7 +154,7 @@ namespace WebAppIdentity
                     .WithSimpleSchedule(x => x.WithIntervalInSeconds(5).RepeatForever()));  // 5秒钟调度一次
                     //.WithSchedule(CronScheduleBuilder.WeeklyOnDayAndHourAndMinute(DayOfWeek.Thursday, 18, 30)));    // 每周四18:30 调度一次
                 });
-            services.AddQuartzHostedService(m => m.WaitForJobsToComplete = true);
+            services.AddQuartzHostedService(m => m.WaitForJobsToComplete = true);  // WaitForJobsToComplete = true 表示只有当任务完成才能终结程序
             #endregion
         }
         /*
@@ -264,9 +267,16 @@ namespace WebAppIdentity
             app.UseAuthorization();
 
             //app.UseMiddleware<PingPongMiddleware>();
+            #region UseMvc
+            app.UseMvc(options =>
+            {
+                options.MapRoute(name: "default", template: "{controller}/{action}/{id:int?}"); // 使用自定义路由,id 为可选参数，类型int
+            });
+            #endregion
 
             app.UseEndpoints(endpoints =>
             {
+                #region 自定义终结点映射路径
                 // 方式1
                 //var endpoint = endpoints.CreateApplicationBuilder().UseMiddleware<PingPongMiddleware>().Build();
                 //endpoints.Map("/ping", endpoint);
@@ -288,15 +298,19 @@ namespace WebAppIdentity
                     await context.Response.WriteAsJsonAsync(json);
                 }).WithDisplayName("ping end point");
                 endpoints.MapWeather("/weather");
-
+                #endregion
+                // 添加RazorPage中间件
                 endpoints.MapRazorPages();
+                // 添加Controller中间件
+                //endpoints.MapControllers();
                 endpoints.MapControllers();
+
             });
-            // 终结路由，返回响应
+            // 终结路由，终结管道返回响应
             app.Run(async (context) =>
             {
-                context.Response.ContentType = "text/plain";
-                await context.Response.WriteAsync("something to return");
+                //context.Response.ContentType = "text/plain";
+                await context.Response.WriteAsync($"找不到路径：{context.Request.Path}");
             });
         }
 

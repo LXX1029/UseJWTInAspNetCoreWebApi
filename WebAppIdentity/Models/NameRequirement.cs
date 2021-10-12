@@ -22,7 +22,7 @@ namespace WebAppIdentity.Models
         public string NameKey { get; set; }
     }
     /// <summary>
-    /// Name条件 授权处理
+    /// 当前用户名是否包含NameKey条件 授权处理
     /// </summary>
     public class NameRequerementHandler : AuthorizationHandler<NameRequirement>
     {
@@ -37,7 +37,9 @@ namespace WebAppIdentity.Models
     }
 
     public class IsRecipeOwnerRequirement : IAuthorizationRequirement { }
-
+    /// <summary>
+    /// 判定Recipe是否为当前登录用户创建Handler
+    /// </summary>
     public class IsRecipeOwnerHandler : AuthorizationHandler<IsRecipeOwnerRequirement, Recipe>
     {
         private readonly UserManager<ApplicationUser> _userManager;
