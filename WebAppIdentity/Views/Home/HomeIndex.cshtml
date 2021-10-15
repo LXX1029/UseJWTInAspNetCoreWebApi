@@ -1,17 +1,72 @@
-﻿@model WebAppIdentity.Models.Recipe
+﻿@model ICollection<Recipe>
 @{
-    ViewBag.Title = "Home Index";
+    ViewBag.Title = "Recipe List";
 }
 
 @section section1{
-    <h1>section1 的内容</h1>
+    <h5>section1 的内容</h5>
 }
+
+<script type="text/javascript">
+    $(function () {
+        $('#delete').click(function () {
+            alert("somethings");
+            //$("#dialog-attract").dialog("open");
+            return false;
+        });
+        $("#dialog-attract").dialog(
+            {
+                modal: true,
+                autoOpen: false,
+                width: 800,
+                maxHeight: 400,
+                buttons: {
+                    'Ok': function () {
+
+                        jQuery(this).dialog('close')
+                    },
+                    'Cancel': function () {
+                        jQuery(this).dialog('close')
+                    }
+                },
+                position: ["center", 100]
+            }
+        );
+    });
+</script>
 <body>
-    <div>
-        RecipeName:@Model.Name
+
+    <div class="table-responsive">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th class="text-center">操作</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.RecipeId</td>
+                        <td>@item.Name</td>
+                        <td class="text-center">
+                            <a class="btn btn-primary" asp-controller="Home" asp-action="Detail" asp-route-recipeId="@item.RecipeId">查看</a>
+                            @*硬编码路径，当路由模板修改时，需要修改所有硬编码路径，不容易维护
+                                <a id="delete" href="/api/Home/Delete" name="delete" class="btn btn-danger" style="width:60px;height:35px;">删除</a>*@
+                            <a id="delete" asp-controller="Home" asp-action="Delete" name="delete" class="btn btn-danger" style="width:60px;height:35px;">删除</a>
+
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
-    <div>
-        IsVegan:@Model.IsVegan
+    <div class="row">
+        <a class="btn btn-info" asp-controller="Home" asp-action="Create">创建</a>
     </div>
+
+
 </body>
 

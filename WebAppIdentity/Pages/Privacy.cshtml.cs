@@ -17,8 +17,20 @@ namespace WebAppIdentity.Pages
             _logger = logger;
         }
 
+        [BindProperty]
+        public string Message { get; set; }
         public void OnGet()
         {
+            Message = "OnGet";
+        }
+        //public void OnPost()
+        //{
+        //    Message = "OnPost";
+        //}
+
+        public void OnPostHandler1()
+        {
+            Message = "OnPostHandler";
         }
     }
 }

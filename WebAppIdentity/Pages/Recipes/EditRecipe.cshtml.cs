@@ -32,7 +32,7 @@ namespace WebAppIdentity.Pages.Recipes
             if (this.Recipe == null)
                 return NotFound();
             return Page();
-
+           
 
 
             //this.Recipe = await this._recipeService.GetRecipeById(recipeId);

@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAppIdentity", "WebAppIde
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WorkerServiceTest", "WorkerServiceTest\WorkerServiceTest.csproj", "{D17E8B02-E740-4D3F-9B30-D5AB245D5F1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebIdentityTest", "WebIdentityTest\WebIdentityTest.csproj", "{407892D6-77DE-4744-963A-A32474B882C3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebIdentityTest", "WebIdentityTest\WebIdentityTest.csproj", "{407892D6-77DE-4744-963A-A32474B882C3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

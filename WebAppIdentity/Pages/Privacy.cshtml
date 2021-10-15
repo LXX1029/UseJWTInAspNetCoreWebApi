@@ -1,8 +1,18 @@
-﻿@page
+﻿@page "{handler?}"
 @model PrivacyModel
 @{
     ViewData["Title"] = "Privacy Policy";
 }
 <h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+@functions{
+    [BindProperty]
+    public string Name { get; set; } = "使用function显示的内容";
+}
+<div class="form-group row" >
+    <p>@Model.Message</p>
+      <form method="post" asp-page-handler="Handler1">
+           <button class="btn btn-info">Post</button>
+      </form>
+    <p><a href="#" class="btn btn-info">Get</a></p>
+</div>

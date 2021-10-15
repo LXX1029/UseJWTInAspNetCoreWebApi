@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -35,6 +37,27 @@ namespace WebAppIdentity.Pages.Recipes
             var appUser = await this._userManager.GetUserAsync(this.User);
             this.Recipe.CreatedById = appUser.Id;
             await this._recipeService.CreateRecipe(Recipe);
+
+            #region 测试邮件发送
+            //var body = $@"测试邮件发送内容，需在生成客户端授权码。";
+            //using (var smtp = new SmtpClient())
+            //{
+            //    var credential = new NetworkCredential("dwjams@qq.com", "kartnwkggstmbdje");
+            //    smtp.Credentials = credential;
+            //    smtp.Host = "smtp.qq.com";
+            //    smtp.EnableSsl = true;
+            //    smtp.UseDefaultCredentials = false;
+            //    var message = new MailMessage();
+            //    message.To.Add("duanzipeng@jiean.net");
+            //    message.Subject = "测试邮件发送";
+            //    message.Body = body;
+            //    //message.IsBodyHtml = true;
+            //    message.From = new MailAddress("dwjams@qq.com");
+            //    await smtp.SendMailAsync(message);
+            //}
+            #endregion
+
+
             return RedirectToPage("/Index");
         }
     }

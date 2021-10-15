@@ -112,16 +112,21 @@ namespace WebAppIdentity
             #endregion
 
             // 添加RazorPage服务
-            services.AddRazorPages();
+            services.AddRazorPages().AddRazorPagesOptions(options=> {
+                //options.RootDirectory = "/其它包含page的文件夹名称";
+            });
+          
 
             // 不使用EnableEndpointRouting
-            services.AddControllersWithViews(options => options.EnableEndpointRouting = false);
-            //services.AddControllers();
+            //services.AddControllersWithViews(options => options.EnableEndpointRouting = false);
+            services.AddControllers();
 
 
             services.AddLogDashboard();
-            // 注入 NameRequerement 处理类
+            // 注入 NameRequerementHandler、IsRecipeOwnerHandler
             services.AddScoped<IAuthorizationHandler, NameRequerementHandler>();
+            services.AddScoped<IAuthorizationHandler, IsRecipeOwnerHandler>();
+
             services.AddScoped<IRecipeService, RecipeService>();
             services.Configure<WeatherOptions>(this.Configuration.GetSection(nameof(WeatherOptions)));
             services.AddSingleton<IConfigureOptions<WeatherOptions>, ConfigureWeatherOptions>();
@@ -268,10 +273,10 @@ namespace WebAppIdentity
 
             //app.UseMiddleware<PingPongMiddleware>();
             #region UseMvc
-            app.UseMvc(options =>
-            {
-                options.MapRoute(name: "default", template: "{controller}/{action}/{id:int?}"); // 使用自定义路由,id 为可选参数，类型int
-            });
+            //app.UseMvc(options =>
+            //{
+            //    options.MapRoute(name: "default", template: "api/{controller}/{action}/{id:int?}"); // 使用自定义路由,id 为可选参数，类型int
+            //});
             #endregion
 
             app.UseEndpoints(endpoints =>

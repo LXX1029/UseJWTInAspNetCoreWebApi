@@ -24,21 +24,68 @@ namespace WebAppIdentity.Controllers
         //    // return Json(obj);
         //    return "index action";
         //}
-        public IActionResult HomeIndex()
+        public async Task<IActionResult> HomeIndex()
         {
-            ViewData["HomeContent"] = "Home 页面的内容--ViewData";
-            ViewBag.HomeContent = "Home 页面的内容--ViewBag";
-            ViewBag.Title = "home index  Title";
+            //ViewData["HomeContent"] = "Home 页面的内容--ViewData";
+            //ViewBag.HomeContent = "Home 页面的内容--ViewBag";
+            //ViewBag.Title = "home index  Title";
 
-            var recipe = new Recipe
-            {
-                RecipeId = 100,
-                Name = "Recipe1",
-                IsVegan = true
-            };
-
-            return View("HomeIndex",recipe);
+            //var recipe = new Recipe
+            //{
+            //    RecipeId = 100,
+            //    Name = "Recipe1",
+            //    IsVegan = true
+            //};
+            var list = await _recipeService.GetRecipes();
+            return View("HomeIndex", list);
         }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult CreatePost(Recipe recipe)
+        {
+
+            // TODO 写入数据库
+            return RedirectToAction("HomeIndex");
+        }
+
+
+        public async Task<IActionResult> Detail(int recipeId)
+        {
+            if (recipeId == 0)
+            {
+                return NotFound();
+
+            }
+            var recipe = await this._recipeService.GetRecipeById(recipeId);
+            if (recipe == null)
+                return NotFound();
+            return View(recipe);
+        }
+
+        public IActionResult Back()
+        {
+            return RedirectToAction("HomeIndex");
+        }
+
+        public IActionResult Delete()
+        {
+            return NoContent();
+        }
+
+        //public async Task<IActionResult> Delete(int recipeId)
+        //{
+        //    if (recipeId == 0)
+        //        return NotFound();
+        //    await this._recipeService.DeleteRecipe(recipeId);
+        //    return RedirectToAction("HomeIndex");
+
+        //}
+
         //[Route("/home/ContainRouteParameters/{id1?}")]
         [Route("~/ContainRouteParameters/{id1?}")]
         public string ContainRouteParameters(int id1)

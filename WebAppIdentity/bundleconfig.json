@@ -4,7 +4,11 @@
     "inputFiles": [
       "wwwroot/css/site.css",
       "wwwroot/css/*.css",
-      "!wwwroot/css/site.min.css"
+      "!wwwroot/css/site.min.css",
+      "wwwroot/lib/bootstrap/dist/css/bootstrap.css",
+      "wwwroot/lib/bootstrap/dist/css/bootstrap.min.css",
+      "wwwroot/lib/bootstrap/dist/css/bootstrap-grid.css",
+      "wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.css"
     ]
   },
   {
@@ -12,7 +16,10 @@
     "inputFiles": [
       "wwwroot/js/site.js",
       "wwwroot/js/*.js",
-      "!wwwroot/js/site.min.js"
+      "!wwwroot/js/site.min.js",
+      "wwwroot/lib/bootstrap/dist/js/bootstrap.js",
+      "wwwroot/lib/jquery/dist/js/jquery.js",
+      "wwwroot/lib/jquery/dist/js/jquery.min.js"
     ],
     "minify": {
       "enabled": true,
