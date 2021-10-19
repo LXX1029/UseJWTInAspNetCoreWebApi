@@ -26,7 +26,7 @@
               asp-fallback-test-value="absolute"
               asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css">
 
-         <link rel="stylesheet" href="~/css/site.min.css" />
+        <link rel="stylesheet" href="~/css/site.min.css" />
     </environment>
 
 </head>
@@ -55,8 +55,16 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
-            @RenderBody()
+            <div class="col-md-7">
+                @RenderBody()
+            </div>
+            <div class="col-md-5">
+                @* 410103 为传入参数值 *@
+                @*@await Component.InvokeAsync("Weather", "410103")*@
+                @await Component.InvokeAsync(typeof(WeatherViewComponent), "410104")
+            </div>
         </main>
+
     </div>
 
     <footer class="border-top footer text-muted">

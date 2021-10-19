@@ -25,9 +25,9 @@ namespace WebAppIdentity
         /// 获取本地天气
         /// </summary>
         /// <returns></returns>
-        public async Task<string> GetLocationWeatherInfo()
+        public async Task<string> GetLocationWeatherInfo(string adcode= "410100")
         {
-            var response = await _client.GetAsync("/v3/weather/weatherInfo?key=05716fae19f88ecd42f4325f89dacefb&city=410100&extensions=base");
+            var response = await _client.GetAsync($"/v3/weather/weatherInfo?key=05716fae19f88ecd42f4325f89dacefb&city={adcode}&extensions=base");
             response.EnsureSuccessStatusCode();
             return await response.Content.ReadAsStringAsync();
         }
