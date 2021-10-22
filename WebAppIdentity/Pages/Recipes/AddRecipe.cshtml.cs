@@ -6,7 +6,9 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using WebAppIdentity.Data.Services;
 using WebAppIdentity.Models;
 
@@ -22,18 +24,30 @@ namespace WebAppIdentity.Pages.Recipes
             this._recipeService = recipeService;
             this._userManager = userManager;
         }
+        public List<SelectListItem> Options { get; set; } = new List<SelectListItem>();
         public void OnGet()
         {
+            Options.Add(new SelectListItem { Value = "1", Text = "1" });
+            Options.Add(new SelectListItem { Value = "2", Text = "2" });
+            Options.Add(new SelectListItem { Value = "3", Text = "3" });
         }
+
         [BindProperty]
         public Recipe Recipe { get; set; }
 
+        /// <summary>
+        /// asp-for 属性绑定到一个double[] 数组是，前端将渲染一个列表框，且支持多选值。
+        /// </summary>
+        [BindProperty]
+        public double[] SelectedPrice { get; set; }
         public async Task<IActionResult> OnPostAsync()
         {
             if (!ModelState.IsValid)
             {
+
                 return Page();
             }
+
             var appUser = await this._userManager.GetUserAsync(this.User);
             this.Recipe.CreatedById = appUser.Id;
             await this._recipeService.CreateRecipe(Recipe);
@@ -59,6 +73,16 @@ namespace WebAppIdentity.Pages.Recipes
 
 
             return RedirectToPage("/Index");
+        }
+
+        public override void OnPageHandlerExecuting(PageHandlerExecutingContext context)
+        {
+            base.OnPageHandlerExecuting(context);
+        }
+        public override async Task OnPageHandlerExecutionAsync(PageHandlerExecutingContext context, PageHandlerExecutionDelegate next)
+        {
+
+            await next.Invoke();
         }
     }
 }

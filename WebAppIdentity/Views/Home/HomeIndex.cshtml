@@ -42,6 +42,7 @@
                 <tr>
                     <th>ID</th>
                     <th>Name</th>
+                    <th>IsVegan</th>
                     <th class="text-center">操作</th>
                 </tr>
             </thead>
@@ -51,11 +52,14 @@
                     <tr>
                         <td>@item.RecipeId</td>
                         <td>@item.Name</td>
+                        <td>
+                        <input asp-for="@item.IsVegan" value="@item.IsVegan"/>
+                        </td>
                         <td class="text-center">
                             <a class="btn btn-primary" asp-controller="Home" asp-action="Detail" asp-route-recipeId="@item.RecipeId">查看</a>
                             @*硬编码路径，当路由模板修改时，需要修改所有硬编码路径，不容易维护
                                 <a id="delete" href="/api/Home/Delete" name="delete" class="btn btn-danger" style="width:60px;height:35px;">删除</a>*@
-                            <a id="delete" asp-controller="Home" asp-action="Delete" name="delete" class="btn btn-danger" style="width:60px;height:35px;">删除</a>
+                            <a id="delete" asp-controller="Home" asp-action="Delete" asp-route-recipeId="@item.RecipeId" name="delete" class="btn btn-danger" style="width:60px;height:35px;">删除</a>
 
                         </td>
                     </tr>

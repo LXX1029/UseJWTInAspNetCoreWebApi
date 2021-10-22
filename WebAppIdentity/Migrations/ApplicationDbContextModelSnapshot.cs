@@ -216,6 +216,9 @@ namespace WebAppIdentity.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<double>("Price")
+                        .HasColumnType("REAL");
+
                     b.HasKey("RecipeId");
 
                     b.ToTable("Recipes");
@@ -224,10 +227,11 @@ namespace WebAppIdentity.Migrations
                         new
                         {
                             RecipeId = 1,
-                            CreatedById = "d6033247-6924-4338-813e-46e111949e64",
+                            CreatedById = "f74e8757-8e4a-442e-9742-f6d6ac214a81",
                             IsVegan = false,
                             IsVegetarian = false,
-                            Name = "Recip1"
+                            Name = "Recip1",
+                            Price = 0.0
                         });
                 });
 

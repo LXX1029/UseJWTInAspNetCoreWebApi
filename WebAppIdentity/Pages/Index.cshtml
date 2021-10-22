@@ -6,6 +6,7 @@
 
 <div class="text-center">
     <h1 class="display-4">RecipeList</h1>
+    <p>Session Value:@ViewData["Session1"]</p>
 </div>
 <div>
     @if(!string.IsNullOrEmpty(Model.CurrentUserId)){
@@ -16,6 +17,7 @@
             <tr>
                 <th>Name</th>
                 <th>IsVegetarian</th>
+                <th>Price</th>
             </tr>
         </thead>
         <tbody>
@@ -24,23 +26,24 @@
             <tr>
                 <td>@item.Name</td>
                 <td>@item.IsVegetarian</td>
+                <th>@item.Price</th>
                 <td>
                     @*Name中包含2 显示“Edit”标签*@
                     @*@if (User.Identity.Name.Contains("2"))
-                        {
-                            <a asp-page="/Recipes/EditRecipe" asp-route-recipeId="@item.RecipeId">Edit</a>
-                        }*@
+            {
+                <a asp-page="/Recipes/EditRecipe" asp-route-recipeId="@item.RecipeId">Edit</a>
+            }*@
                     @*@if (User.Identity.IsAuthenticated)
-                        {
-                            <a asp-page="/Recipes/EditRecipe" asp-route-recipeId="@item.RecipeId">Edit</a>
-                            <a asp-page="/Recipes/Detail" asp-route-recipeId="@item.RecipeId">Detial</a>
-                            <a asp-page-handler="Delete" asp-route-recipeId="@item.RecipeId">Delete</a>
-                        }*@
+            {
+                <a asp-page="/Recipes/EditRecipe" asp-route-recipeId="@item.RecipeId">Edit</a>
+                <a asp-page="/Recipes/Detail" asp-route-recipeId="@item.RecipeId">Detial</a>
+                <a asp-page-handler="Delete" asp-route-recipeId="@item.RecipeId">Delete</a>
+            }*@
                     @if (item.CreatedById == Model.CurrentUserId)
-                        {
-                    <a asp-page="/Recipes/EditRecipe" asp-route-recipeId="@item.RecipeId">Edit</a>
-                    <a asp-page-handler="Delete" asp-route-recipeId="@item.RecipeId">Delete</a>
-                        }
+                    {
+                        <a asp-page="/Recipes/EditRecipe" asp-route-recipeId="@item.RecipeId">Edit</a>
+                        <a asp-page-handler="Delete" asp-route-recipeId="@item.RecipeId">Delete</a>
+                    }
                     <a asp-page="/Recipes/Detail" asp-route-recipeId="@item.RecipeId">Detial</a>
                 </td>
             </tr>

@@ -55,13 +55,13 @@
     </header>
     <div class="container">
         <main role="main" class="pb-3">
-            <div class="col-md-7">
+            <div class="col-md-10">
                 @RenderBody()
             </div>
-            <div class="col-md-5">
+            <div class="col-md-2">
                 @* 410103 为传入参数值 *@
-                @*@await Component.InvokeAsync("Weather", "410103")*@
-                @await Component.InvokeAsync(typeof(WeatherViewComponent), "410104")
+                @await Component.InvokeAsync("Weather", "410103")
+                @*@await Component.InvokeAsync(typeof(WeatherViewComponent), "410104")*@
             </div>
         </main>
 

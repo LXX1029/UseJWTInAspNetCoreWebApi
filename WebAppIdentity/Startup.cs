@@ -91,6 +91,11 @@ namespace WebAppIdentity
             }).AddEntityFrameworkStores<ApplicationDbContext>();
             #endregion
 
+            services.ConfigureApplicationCookie(options =>
+            {
+                //options.LoginPath = "";
+            });
+
             #region 添加授权策略
             services.AddAuthorization(config =>
             {
@@ -111,15 +116,23 @@ namespace WebAppIdentity
             });
             #endregion
 
+            #region RazorPage服务
             // 添加RazorPage服务
-            services.AddRazorPages().AddRazorPagesOptions(options=> {
-                //options.RootDirectory = "/其它包含page的文件夹名称";
-            });
-          
+            //services.AddRazorPages().AddRazorPagesOptions(options =>
+            //{
+            //options.RootDirectory = "/其它包含page的文件夹名称";
+
+            // 任何不存在与路由模板中的请求路径都重定向到index页面
+            //options.Conventions.AddPageRoute("/index", "{*url}");
+
+            // 请求privacy 时需要验证授权
+            //options.Conventions.AuthorizePage("/privacy");  
+            // });
+            #endregion
 
             // 不使用EnableEndpointRouting
-            //services.AddControllersWithViews(options => options.EnableEndpointRouting = false);
-            services.AddControllers();
+            services.AddControllersWithViews(options => options.EnableEndpointRouting = false);
+            //services.AddControllers();
 
 
             services.AddLogDashboard();
@@ -160,6 +173,24 @@ namespace WebAppIdentity
                     //.WithSchedule(CronScheduleBuilder.WeeklyOnDayAndHourAndMinute(DayOfWeek.Thursday, 18, 30)));    // 每周四18:30 调度一次
                 });
             services.AddQuartzHostedService(m => m.WaitForJobsToComplete = true);  // WaitForJobsToComplete = true 表示只有当任务完成才能终结程序
+            #endregion
+
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = context => false;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+            #region 使用Session
+            services.AddSession(options =>
+            {
+                options.Cookie.Name = "MySessionCookie";
+                //options.Cookie
+                options.IdleTimeout = TimeSpan.FromSeconds(5);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+
+            });
+            services.AddMemoryCache();
             #endregion
         }
         /*
@@ -242,8 +273,8 @@ namespace WebAppIdentity
             }
             //app.UseHttpsRedirection();
             app.UseLogDashboard();
-
-
+            app.UseStaticFiles();
+            app.UseSession();
 
 
             #region 自定义中间件
@@ -260,23 +291,17 @@ namespace WebAppIdentity
             // 封装成方法
             //app.UseCustomHeaders();
             #endregion
-
-
-
-            app.UseStaticFiles();
             app.UseRouting();
-
             app.UseCors("CorsPolicy");
-
             app.UseAuthentication();
             app.UseAuthorization();
 
             //app.UseMiddleware<PingPongMiddleware>();
             #region UseMvc
-            //app.UseMvc(options =>
-            //{
-            //    options.MapRoute(name: "default", template: "api/{controller}/{action}/{id:int?}"); // 使用自定义路由,id 为可选参数，类型int
-            //});
+            app.UseMvc(options =>
+            {
+                options.MapRoute(name: "default", template: "api/{controller}/{action}/{id:int?}"); // 使用自定义路由,id 为可选参数，类型int
+            });
             #endregion
 
             app.UseEndpoints(endpoints =>

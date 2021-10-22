@@ -1,0 +1,22 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    ViewBag.Tilte = "上传文件";
+}
+
+<form method="post" class="col-sm-12" style="background-color:deeppink" asp-page-handler="UploadFile"
+      enctype="multipart/form-data">
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10" style="background-color:brown">
+            <input  class="form-control" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-10 offset-sm-2" style="background-color:palevioletred">
+            <button class="btn btn-primary" id="submit1">Submit</button>
+        </div>
+    </div>
+</form>
+

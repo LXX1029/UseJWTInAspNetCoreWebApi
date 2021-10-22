@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -8,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using WebAppIdentity.CustomConfigure;
 using WebAppIdentity.Data.Services;
@@ -52,6 +54,17 @@ namespace WebAppIdentity.Pages
 
             RecipeList = (List<Recipe>)await this._recipeService.GetRecipes();
             this._logger.LogInformation($"Loaded {this.RecipeList.Count} recipes");
+
+            // 从Request中获取cookie
+            var cookieValue = Request.Cookies["mycookie"];
+
+            // 获取session值
+            if (HttpContext.Session.TryGetValue("session1", out byte[] result))
+            {
+                ViewData["Session1"] = Encoding.UTF8.GetString(result);
+            }
+
+
             using (_logger.BeginScope("Scope value"))
             {
                 this._logger.LogWarning(new Exception("自定义Warning异常"), $"Microsoft-Warning");
@@ -59,7 +72,7 @@ namespace WebAppIdentity.Pages
             using (_logger.BeginScope(new Dictionary<string, object> { { "custom value", 12345 } }))
                 this._logger.LogError($"Microsoft-Error");
 
-           
+
         }
 
         public async Task<IActionResult> OnGetDelete(int? recipeId)

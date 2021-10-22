@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WebAppIdentity.Attributes;
 using WebAppIdentity.Data.Services;
 using WebAppIdentity.Models;
 
@@ -40,14 +42,23 @@ namespace WebAppIdentity.Controllers
             return View("HomeIndex", list);
         }
 
+
+
         public IActionResult Create()
         {
+
             return View();
         }
 
         [HttpPost]
+        [PreventDoublePost]
         public IActionResult CreatePost(Recipe recipe)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("Create");
+            }
+
 
             // TODO 写入数据库
             return RedirectToAction("HomeIndex");
@@ -72,19 +83,19 @@ namespace WebAppIdentity.Controllers
             return RedirectToAction("HomeIndex");
         }
 
-        public IActionResult Delete()
-        {
-            return NoContent();
-        }
-
-        //public async Task<IActionResult> Delete(int recipeId)
+        //public IActionResult Delete()
         //{
-        //    if (recipeId == 0)
-        //        return NotFound();
-        //    await this._recipeService.DeleteRecipe(recipeId);
-        //    return RedirectToAction("HomeIndex");
-
+        //    return NoContent();
         //}
+
+        public async Task<IActionResult> Delete(int recipeId)
+        {
+            if (recipeId == 0)
+                return NotFound();
+            await this._recipeService.DeleteRecipe(recipeId);
+            return RedirectToAction("HomeIndex");
+
+        }
 
         //[Route("/home/ContainRouteParameters/{id1?}")]
         [Route("~/ContainRouteParameters/{id1?}")]

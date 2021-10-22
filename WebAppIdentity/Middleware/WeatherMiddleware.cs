@@ -41,4 +41,16 @@ namespace WebAppIdentity.Middleware
             //await this._next(context);
         }
     }
+
+
+    /// <summary>
+    /// 继承自IMiddleware ,需在configureServices 中进行注册
+    /// </summary>
+    public class WeatherMiddlewareImp : IMiddleware
+    {
+        public async Task InvokeAsync(HttpContext context, RequestDelegate next)
+        {
+            await next(context);
+        }
+    }
 }

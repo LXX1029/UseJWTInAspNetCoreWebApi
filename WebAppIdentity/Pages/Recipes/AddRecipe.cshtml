@@ -3,25 +3,46 @@
 @{
     ViewData["Title"] = "Create";
 }
-<h1>Create</h1>
-<div class="row">
-    <form method="post">
-        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <div class="form-group row">
-            <label asp-for="Recipe.Name" class="control-label"></label>
+<h1>创建</h1>
+<form method="post" class="mt-2">
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div class="form-group row">
+        <label asp-for="Recipe.Name" class="text-center  col-sm-1 col-form-label"></label>
+        <div class="col-sm-5">
             <input asp-for="Recipe.Name" class="form-control" />
             <span asp-validation-for="Recipe.Name" class="text-danger"></span>
         </div>
-        <div class="form-group row">
-            <input type="submit" value="Create" class="btn btn-primary" /> <a asp-page="/Index" class="btn btn-primary">返回首页</a>
+    </div>
+    <div class="form-group row">
+        <label asp-for="Recipe.Price" class="text-center  col-sm-1 col-form-label">价格</label>
+        <div class="col-sm-5">
+            <select class="form-control" asp-items="Model.Options" asp-for="Recipe.Price">
+                <option value="">选择</option>
+                @*<option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>*@
+            </select>
+            
         </div>
-    </form>
-</div>
-@section  Scripts{ 
-<script type="text/javascript">
-    $(function () {
+    </div>
+    <div class="form-group row" style="background-color:deepskyblue">
+        <div class="col-sm-1"  style="background-color:lightgray">
+            <input type="submit" value="提交" class="btn btn-primary text-md-center" />
+        </div>
+        <div class="col-sm-2">
+            <a asp-page="/Index" class="btn btn-primary">返回首页</a>
+        </div>
+   
+    </div>
+</form>
 
-        alert("addRecipe page loaded")
-    });
-</script>
+@section Scripts{
+    <script type="text/javascript">
+        $(function () {
+
+            //alert("addRecipe page loaded")
+        });
+    </script>
 }
